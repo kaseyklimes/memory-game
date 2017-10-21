@@ -55,6 +55,11 @@ function shuffle(array) {
 let openCards = []
 let idList = []
 
+let noMatch = function(){
+  $('#' + idList[0]).removeClass('match');
+  $('#' + idList[1]).removeClass('match');
+  idList = [];
+}
 let addToOpen = function() {
   $('.card').click(function() {
     //reveal symbol
@@ -65,9 +70,7 @@ let addToOpen = function() {
       idList.push($(this).attr('id'));
       //if not a match, hide the cards again
       if (openCards.length == 2 && $(openCards)[0].classList[1] != $(openCards)[1].classList[1]) {
-        $('#' + idList[0]).removeClass('match');
-        $('#' + idList[1]).removeClass('match');
-        idList = [];
+        setTimeout(function() { noMatch(); }, 1000);
       }
     } else {
       //if starting over, empty the openCards & idList lists
