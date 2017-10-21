@@ -56,29 +56,36 @@ let openCards = []
 let idList = []
 
 let noMatch = function(){
-  $('#' + idList[0]).removeClass('match');
-  $('#' + idList[1]).removeClass('match');
+  $('#' + idList[0]).removeClass('show fail');
+  $('#' + idList[1]).removeClass('show fail');
   idList = [];
 }
 let addToOpen = function() {
   $('.card').click(function() {
     //reveal symbol
-    $(this).addClass('match');
+    $(this).addClass('show');
     if (openCards.length < 2) {
-      //append items to lists
+      //append items to lists if list is shorter than 2 items
       openCards.push($(this)[0].children[0]);
       idList.push($(this).attr('id'));
       //if not a match, hide the cards again
       if (openCards.length == 2 && $(openCards)[0].classList[1] != $(openCards)[1].classList[1]) {
-        setTimeout(function() { noMatch(); }, 1000);
+        //failed match
+        $('#' + idList[0]).addClass('fail');
+        $('#' + idList[1]).addClass('fail');
+        setTimeout(function() { noMatch(); }, 1500);
+      } else if (openCards.length == 2) {
+        //succesful match
+        $('#' + idList[0]).addClass('match');
+        $('#' + idList[1]).addClass('match');
       }
     } else {
       //if starting over, empty the openCards & idList lists
       openCards = [];
       idList = [];
-      //append the new card to the openCards list
+      //append the new clicked card to the openCards list
       openCards.push($(this)[0].children[0]);
-      //append the new card to idlist
+      //append the new clicked card to idlist
       idList.push($(this).attr('id'));
     };
   });
