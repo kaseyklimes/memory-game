@@ -1,7 +1,7 @@
 /*
  * Create a list that holds all of your cards
  */
-
+const cards = ['diamond', 'diamond', 'paper-plane-o', 'paper-plane-o', 'bicycle', 'bicycle', 'leaf', 'leaf', 'bomb', 'bomb', 'anchor', 'anchor', 'bolt', 'bolt', 'cube', 'cube'];
 
 /*
  * Display the cards on the page
@@ -9,6 +9,12 @@
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
+
+shuffle(cards);
+for (card of cards){
+  $('.deck').append(`<li class="card"><i class="fa fa-${card}"></i></li>`);
+};
+
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -29,6 +35,12 @@ function shuffle(array) {
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
+ */
+
+
+
+
+/*
  *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
  *  - if the list already has another card, check to see if the two cards match
  *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
