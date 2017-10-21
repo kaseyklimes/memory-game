@@ -10,25 +10,28 @@ const cards = ['diamond', 'diamond', 'paper-plane-o', 'paper-plane-o', 'bicycle'
  *   - add each card's HTML to the page
  */
 
-shuffle(cards);
-for (card of cards){
-  $('.deck').append(`<li class="card"><i class="fa fa-${card}"></i></li>`);
+// shuffle(cards);
+i = 0
+for (card of cards) {
+  $('.deck').append(`<li class="card" id="${i}"><i class="fa fa-${card}"></i></li>`);
+  i++;
 };
 
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
+  var currentIndex = array.length,
+    temporaryValue, randomIndex;
 
-    while (currentIndex !== 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-    }
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
 
-    return array;
+  return array;
 }
 
 
@@ -49,19 +52,33 @@ function shuffle(array) {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
- openCards = []
+let openCards = []
+let idList = []
 
- let addToOpen = function() {
-   $('.card').click(function() {
-     $(this).addClass('match');
-     if (openCards.length < 2) {
-       openCards.push($(this).children()[0]);
-     } else {
-       openCards = [];
-       openCards.push($(this).children()[0]);
+let addToOpen = function() {
+  $('.card').click(function() {
+    //reveal symbol
+    $(this).addClass('match');
+    if (openCards.length < 2) {
+      //append items to lists
+      openCards.push($(this)[0].children[0]);
+      idList.push($(this).attr('id'));
+      //if not a match, hide the cards again
+      if (openCards.length == 2 && $(openCards)[0].classList[1] != $(openCards)[1].classList[1]) {
+        $('#' + idList[0]).removeClass('match');
+        $('#' + idList[1]).removeClass('match');
+        idList = [];
+      }
+    } else {
+      //if starting over, empty the openCards & idList lists
+      openCards = [];
+      idList = [];
+      //append the new card to the openCards list
+      openCards.push($(this)[0].children[0]);
+      //append the new card to idlist
+      idList.push($(this).attr('id'));
+    };
+  });
+};
 
-     };
-   });
- };
-
- addToOpen();
+addToOpen();
