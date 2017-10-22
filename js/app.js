@@ -10,7 +10,7 @@ const cards = ['diamond', 'diamond', 'paper-plane-o', 'paper-plane-o', 'bicycle'
  *   - add each card's HTML to the page
  */
 
-// shuffle(cards);
+//shuffle(cards);
 i = 0
 for (card of cards) {
   $('.deck').append(`<li class="card" id="${i}"><i class="fa fa-${card}"></i></li>`);
@@ -55,11 +55,28 @@ function shuffle(array) {
 let openCards = []
 let idList = []
 
-let noMatch = function(){
-  $('#' + idList[0]).removeClass('show fail');
-  $('#' + idList[1]).removeClass('show fail');
-  idList = [];
-}
+let noMatch = function() {
+  let failFlash = function() {
+    $('#' + idList[0]).removeClass('show fail');
+    $('#' + idList[1]).removeClass('show fail');
+    idList = [];
+  };
+  $('#' + idList[0]).addClass('fail');
+  $('#' + idList[1]).addClass('fail');
+  setTimeout(function() {
+    failFlash();
+  }, 1000);
+};
+
+let match = function(){
+  $('#' + idList[0]).addClass('match');
+  $('#' + idList[1]).addClass('match');
+};
+
+let matchCondition = function(){
+  return openCards.length == 2 && $(openCards)[0].classList[1] != $(openCards)[1].classList[1]
+};
+
 let addToOpen = function() {
   $('.card').click(function() {
     //reveal symbol
@@ -69,15 +86,12 @@ let addToOpen = function() {
       openCards.push($(this)[0].children[0]);
       idList.push($(this).attr('id'));
       //if not a match, hide the cards again
-      if (openCards.length == 2 && $(openCards)[0].classList[1] != $(openCards)[1].classList[1]) {
+      if (matchCondition()) {
         //failed match
-        $('#' + idList[0]).addClass('fail');
-        $('#' + idList[1]).addClass('fail');
-        setTimeout(function() { noMatch(); }, 1500);
+        noMatch();
       } else if (openCards.length == 2) {
         //succesful match
-        $('#' + idList[0]).addClass('match');
-        $('#' + idList[1]).addClass('match');
+        match();
       }
     } else {
       //if starting over, empty the openCards & idList lists
