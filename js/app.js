@@ -77,6 +77,15 @@ let matchCondition = function(){
   return openCards.length == 2 && $(openCards)[0].classList[1] != $(openCards)[1].classList[1]
 };
 
+
+moves = 1
+$('.moves').text(0)
+
+let moveCounter = function(){
+  $('.moves').text(moves)
+  moves++;
+}
+
 let addToOpen = function() {
   $('.card').click(function() {
     //reveal symbol
@@ -89,9 +98,11 @@ let addToOpen = function() {
       if (matchCondition()) {
         //failed match
         noMatch();
+        moveCounter();
       } else if (openCards.length == 2) {
         //succesful match
         match();
+        moveCounter();
       }
     } else {
       //if starting over, empty the openCards & idList lists
