@@ -9,13 +9,15 @@ const cards = ['diamond', 'diamond', 'paper-plane-o', 'paper-plane-o', 'bicycle'
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
-
-//shuffle(cards);
-i = 0
-for (card of cards) {
-  $('.deck').append(`<li class="card" id="${i}"><i class="fa fa-${card}"></i></li>`);
-  i++;
+let initiate = function() {
+  // shuffle(cards);
+  i = 0
+  for (card of cards) {
+    $('.deck').append(`<li class="card" id="${i}"><i class="fa fa-${card}"></i></li>`);
+    i++;
+  };
 };
+initiate();
 
 
 // Shuffle function from http://stackoverflow.com/a/2450976
@@ -68,23 +70,39 @@ let noMatch = function() {
   }, 1000);
 };
 
-let match = function(){
+let match = function() {
   $('#' + idList[0]).addClass('match');
   $('#' + idList[1]).addClass('match');
 };
 
-let matchCondition = function(){
+let matchCondition = function() {
   return openCards.length == 2 && $(openCards)[0].classList[1] != $(openCards)[1].classList[1]
 };
 
+let resetMoves = function() {
+  moves = 1
+  $('.moves').text(0)
+};
+resetMoves();
 
-moves = 1
-$('.moves').text(0)
-
-let moveCounter = function(){
+let moveCounter = function() {
   $('.moves').text(moves)
   moves++;
 }
+
+let emptyLists = function() {
+  openCards = [];
+  idList = [];
+};
+
+let matches = 0
+
+let gameWin = function() {
+  if (matches == 8) {
+    // all list items are selected
+    console.log('success')
+  };
+};
 
 let addToOpen = function() {
   $('.card').click(function() {
@@ -102,12 +120,15 @@ let addToOpen = function() {
       } else if (openCards.length == 2) {
         //succesful match
         match();
+        matches++;
+        setTimeout(function() {
+          gameWin();
+        }, 1000);
         moveCounter();
       }
     } else {
       //if starting over, empty the openCards & idList lists
-      openCards = [];
-      idList = [];
+      emptyLists();
       //append the new clicked card to the openCards list
       openCards.push($(this)[0].children[0]);
       //append the new clicked card to idlist
@@ -117,3 +138,17 @@ let addToOpen = function() {
 };
 
 addToOpen();
+
+let restart = function() {
+  $('.restart').click(function() {
+    emptyLists();
+    $('.deck').empty();
+    initiate();
+    resetMoves();
+    addToOpen();
+  });
+};
+
+restart();
+
+//success check
