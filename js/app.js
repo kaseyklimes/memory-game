@@ -81,7 +81,7 @@ let match = function() {
 let matchCondition = function() {
   let cardOne = $(openCards)[0].classList[1];
   let cardTwo = $(openCards)[1].classList[1];
-  return openCards.length == 2 && cardOne != cardTwo;
+  return openCards.length == 2 && cardOne != cardTwo || idList[0] == idList[1];
 };
 
 let resetMoves = function() {
