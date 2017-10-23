@@ -9,6 +9,8 @@ const cards = ['diamond', 'diamond', 'paper-plane-o', 'paper-plane-o', 'bicycle'
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
+ //make it so twice clicked card doesn't create match.
+
 let initiate = function() {
   // shuffle(cards);
   i = 0
@@ -57,12 +59,13 @@ function shuffle(array) {
 let openCards = []
 let idList = []
 
+let failFlash = function() {
+  $('#' + idList[0]).removeClass('show fail');
+  $('#' + idList[1]).removeClass('show fail');
+  idList = [];
+};
+
 let noMatch = function() {
-  let failFlash = function() {
-    $('#' + idList[0]).removeClass('show fail');
-    $('#' + idList[1]).removeClass('show fail');
-    idList = [];
-  };
   $('#' + idList[0]).addClass('fail');
   $('#' + idList[1]).addClass('fail');
   setTimeout(function() {
@@ -76,7 +79,9 @@ let match = function() {
 };
 
 let matchCondition = function() {
-  return openCards.length == 2 && $(openCards)[0].classList[1] != $(openCards)[1].classList[1]
+  let cardOne = $(openCards)[0].classList[1];
+  let cardTwo = $(openCards)[1].classList[1];
+  return openCards.length == 2 && cardOne != cardTwo;
 };
 
 let resetMoves = function() {
@@ -104,14 +109,19 @@ let gameWin = function() {
   };
 };
 
+let pushCards = function(card){
+  openCards.push(card[0].children[0]);
+  idList.push(card.attr('id'));
+}
+
 let addToOpen = function() {
   $('.card').click(function() {
     //reveal symbol
     $(this).addClass('show');
     if (openCards.length < 2) {
       //append items to lists if list is shorter than 2 items
-      openCards.push($(this)[0].children[0]);
-      idList.push($(this).attr('id'));
+      //!!push whole card $(this), pull pieces needed out after
+      pushCards($(this));
       //if not a match, hide the cards again
       if (matchCondition()) {
         //failed match
@@ -130,9 +140,7 @@ let addToOpen = function() {
       //if starting over, empty the openCards & idList lists
       emptyLists();
       //append the new clicked card to the openCards list
-      openCards.push($(this)[0].children[0]);
-      //append the new clicked card to idlist
-      idList.push($(this).attr('id'));
+      pushCards($(this));
     };
   });
 };
